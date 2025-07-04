@@ -1,0 +1,21 @@
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+
+# Load raw customer data
+df = pd.read_csv("data/customer_data.csv")
+
+# Encode categorical columns
+label_encoders = {}
+for col in ["Gender", "PolicyType"]:
+    le = LabelEncoder()
+    df[col] = le.fit_transform(df[col])
+    label_encoders[col] = le  # Optional, if you need to decode later
+
+# Scale numerical columns
+scaler = StandardScaler()
+numerical_cols = ["Age", "Tenure", "Premium", "ClaimsMade", "CustomerSatisfaction"]
+df[numerical_cols] = scaler.fit_transform(df[numerical_cols])
+
+# Save the processed data to CSV
+df.to_csv("data/processed_data.csv", index=False)
+print("Processed data saved successfully to data/processed_data.csv!")

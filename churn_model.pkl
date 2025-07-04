@@ -1,0 +1,44 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
+import xgboost as xgb
+import joblib
+
+# ✅ Step 1: Load Processed Data
+df = pd.read_csv("../data/processed_data.csv")
+
+# ✅ Step 2: Split Features and Target
+X = df.drop(columns=["Churn"])
+y = df["Churn"]
+
+# ✅ Step 3: Split into Training and Testing Sets
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y
+)
+
+# ✅ Step 4: Train XGBoost Model
+model = xgb.XGBClassifier(use_label_encoder=False, eval_metric="logloss")
+model.fit(X_train, y_train)
+
+# ✅ Step 5: Evaluate Model Performance
+y_pred = model.predict(X_test)
+print("Classification Report (Test Set):")
+print(classification_report(y_test, y_pred))
+
+# ✅ Step 6: Save Model to churn_model.pkl
+model_path = "../models/churn_model.pkl"
+joblib.dump(model, model_path)
+print(f"Model saved successfully to {model_path}")
+
+# ✅ Step 7: Load Model Later for Prediction
+loaded_model = joblib.load(model_path)
+print("Model loaded successfully.")
+
+# ✅ Step 8: Make Predictions on New Data (Here we use same data for demo)
+new_data = pd.read_csv("../data/processed_data.csv")
+X_new = new_data.drop(columns=["Churn"])
+
+# Predict Churn on New Data
+y_new_pred = loaded_model.predict(X_new)
+print("Predictions on New Data:")
+print(y_new_pred)

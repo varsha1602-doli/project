@@ -1,0 +1,24 @@
+import pandas as pd
+import numpy as np
+
+np.random.seed(42)
+
+n_samples = 100  # Number of customers
+data = {
+    "CustomerID": np.arange(1, n_samples + 1),
+    "Gender": np.random.choice(["Male", "Female"], n_samples),
+    "Age": np.random.randint(18, 70, n_samples),
+    "Tenure": np.random.randint(1, 10, n_samples),
+    "PolicyType": np.random.choice(["Auto", "Health", "Life"], n_samples),
+    "Premium": np.random.randint(500, 2000, n_samples),
+    "ClaimsMade": np.random.randint(0, 5, n_samples),
+    "CustomerSatisfaction": np.random.randint(1, 6, n_samples),
+    "Churn": np.random.choice([0, 1], n_samples, p=[0.75, 0.25])  # 25% churn rate
+}
+
+df = pd.DataFrame(data)
+
+# Save to CSV
+df.to_csv("data/customer_data.csv", index=False)
+
+print("Sample customer data created successfully!")

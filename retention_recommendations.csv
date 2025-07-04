@@ -1,0 +1,15 @@
+# Example: Simple Retention Strategy
+def retention_strategy(row):
+    if row['Churn_Prediction'] == 1:
+        return "Offer Discount or Loyalty Program"
+    else:
+        return "Continue Current Plan"
+
+# Apply Strategy
+predictions_df['Retention_Recommendation'] = predictions_df.apply(retention_strategy, axis=1)
+
+# ✅ Save Recommendations
+predictions_df[['CustomerID', 'Churn_Prediction', 'Retention_Recommendation']].to_csv(
+    "../outputs/retention_recommendations.csv", index=False
+)
+print("Retention recommendations saved to ../outputs/retention_recommendations.csv")
